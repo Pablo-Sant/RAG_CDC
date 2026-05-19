@@ -1,7 +1,5 @@
 import os
 from llama_index.core import Settings
-from llama_index.llms.openai import OpenAI
-from llama_index.llms.ollama import Ollama
 from llama_index.llms.groq import Groq
 from dotenv import load_dotenv
 
