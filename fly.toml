@@ -2,7 +2,7 @@ app = "rag-cdc"
 primary_region = "gru" # Região de São Paulo (mais próxima)
 
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = "dockerfile"
 
 [http_service]
   internal_port = 8080
