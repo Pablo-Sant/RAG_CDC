@@ -1,0 +1,17 @@
+app = "rag-cdc"
+primary_region = "gru" # Região de São Paulo (mais próxima)
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[vm]]
+  size = "shared-cpu-2x" # Dá um fôlego extra de CPU para o build e inicialização
+  memory = "2gb"         # Aloca 2GB de RAM para suportar o torch e os modelos de IA

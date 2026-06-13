@@ -1,9 +1,6 @@
 .venv
-chroma
-__pycache__
-*.pyc
-.env
 .git
-files
-ollama
-.ipynb_checkpoints
+__pycache__
+chroma/
+files/
+.env
