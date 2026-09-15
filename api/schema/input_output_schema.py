@@ -11,4 +11,5 @@ class InOutRequest(InOutBase):
 
 class InOutResponse(BaseModel):
     response: str
+    chunks_usados: list[dict]
     

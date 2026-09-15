@@ -1,0 +1,51 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+
+env:
+  PROJECT_ID: assistente-cdc
+  REGION: southamerica-east1
+  REPO: assistente-cdc-repo
+  SERVICE: assistente-cdc-api
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: "projects/SEU_PROJECT_NUMBER/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+          service_account: "github-deployer@assistente-cdc.iam.gserviceaccount.com"
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configurar Docker para Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+
+      - name: Build e push da imagem
+        working-directory: backend
+        run: |
+          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/backend:${{ github.sha }}"
+          docker build -t $IMAGE .
+          docker push $IMAGE
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+
+      - name: Deploy no Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE }} \
+            --image="${{ env.IMAGE }}" \
+            --region="${{ env.REGION }}" \
+            --platform=managed \
+            --allow-unauthenticated \
+            --set-secrets="OPENAI_API_KEY=OPENAI_API_KEY:latest,PINECONE_API_KEY=PINECONE_API_KEY:latest,GROQ_API_KEY=GROQ_API_KEY:latest,GOOGLE_API_KEY=GOOGLE_API_KEY:latest"
