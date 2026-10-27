@@ -23,6 +23,7 @@ INSTRUMENTOS = [
 ]
 
 
+
 def instrumento_da_pagina(num_pagina_zero_based: int) -> tuple[str, str]:
     
     nome, tipo = "Documento não identificado", "desconhecido"
@@ -30,6 +31,7 @@ def instrumento_da_pagina(num_pagina_zero_based: int) -> tuple[str, str]:
         if num_pagina_zero_based >= pg_inicio:
             nome, tipo = n, t
     return nome, tipo
+
 
 
 def extrair_texto_por_pagina(pdf_path: str) -> list[dict]:
@@ -151,6 +153,7 @@ def chunk_por_artigo(
     return chunks
 
 
+
 def build_index():
     Settings.embed_model = HuggingFaceEmbedding(
         model_name="intfloat/multilingual-e5-small"
@@ -202,7 +205,8 @@ def build_index():
     pinecone_index = pc.Index("rag-cdc")
     print("Index Pinecone conectado")
 
-    # 7. Cria vector store e indexa
+    
+    
     vector_store = PineconeVectorStore(pinecone_index=pinecone_index)
     storage_context = StorageContext.from_defaults(vector_store=vector_store)
     VectorStoreIndex(nodes, storage_context=storage_context)
