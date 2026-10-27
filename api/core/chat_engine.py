@@ -25,6 +25,8 @@ def get_chat_engine():
         )
         
         pinecone_index = get_index()
+        
+        print(pinecone_index)
          
 
         vector_store = PineconeVectorStore(pinecone_index=pinecone_index)

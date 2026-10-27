@@ -17,7 +17,7 @@ def create_index():
         if "rag-cdc" not in pc.list_indexes().names():    
             pc.create_index(
                 name="rag-cdc",
-                dimension=384,  # bate com intfloat/multilingual-e5-small
+                dimension=384,  
                 metric="cosine",
                 spec=ServerlessSpec(cloud="aws", region="us-east-1") 
             )
